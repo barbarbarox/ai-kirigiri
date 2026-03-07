@@ -1,12 +1,90 @@
 {
-  "background_color": "#ffffff",
-  "description": "AI Interactive Character Chat — Talk with an animated AI companion",
-  "dir": "ltr",
+  "name": "AI Anime Character Chat - Chatbot Anime Interaktif",
+  "short_name": "Anime AI Chat",
+  "description": "Berbincang dengan karakter anime AI yang interaktif dengan berbagai ekspresi emosi real-time",
+  "start_url": "/index.html",
   "display": "standalone",
-  "name": "ai-kirigiri.vercel",
-  "orientation": "any",
+  "background_color": "#0a0a1a",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
   "scope": "/",
-  "short_name": "ai-kirigiri.vercel",
-  "start_url": "/",
-  "theme_color": "#ffffff"
+  "lang": "id-ID",
+  "dir": "auto",
+  "icons": [
+    {
+      "src": "images/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "social", "productivity"],
+  "screenshots": [
+    {
+      "src": "images/screenshots/screenshot-540x720.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "images/screenshots/screenshot-1280x720.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Chat dengan Anime AI",
+      "short_name": "Chat",
+      "description": "Mulai percakapan dengan karakter anime",
+      "url": "/?action=chat",
+      "icons": [
+        {
+          "src": "images/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Lihat Emosi",
+      "short_name": "Emosi",
+      "description": "Lihat berbagai ekspresi anime",
+      "url": "/?action=emotions",
+      "icons": [
+        {
+          "src": "images/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
 }
