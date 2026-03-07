@@ -1,26 +1,12 @@
 {
-  "name": "Kouko AI",
-  "short_name": "Kirigiri,
-  "description": "CHat bot Kirigiri",
-  "start_url": "/",
+  "background_color": "#ffffff",
+  "description": "AI Interactive Character Chat — Talk with an animated AI companion",
+  "dir": "ltr",
   "display": "standalone",
-  "background_color": "#0F0D0A",
-  "theme_color": "#0F0D0A",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["productivity"],
-  "lang": "id"
+  "name": "ai-kirigiri.vercel",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "ai-kirigiri.vercel",
+  "start_url": "/",
+  "theme_color": "#ffffff"
 }
