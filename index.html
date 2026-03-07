@@ -1,142 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI Interactive Character Chat — Talk with an animated AI companion">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AI Interactive Character Chat — Talk with an animated AI companion" />
     <title>AI Character Chat</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-                    colors: {
-                        dark: { 900: '#0a0a1a', 800: '#111128', 700: '#1a1a3e', 600: '#252552' },
-                        accent: { 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' },
-                        glow: { cyan: '#22d3ee', purple: '#c084fc', pink: '#f472b6' }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
+            colors: {
+              dark: { 900: "#0a0a1a", 800: "#111128", 700: "#1a1a3e", 600: "#252552" },
+              accent: { 400: "#a78bfa", 500: "#8b5cf6", 600: "#7c3aed" },
+              glow: { cyan: "#22d3ee", purple: "#c084fc", pink: "#f472b6" },
+            },
+          },
+        },
+      };
     </script>
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json" />
+
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="bg-dark-900 text-white font-sans min-h-screen overflow-hidden">
-
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-dark-900 text-white font-sans min-h-screen overflow-hidden">
     <!-- Main Container -->
     <div id="app" class="flex h-screen w-screen">
-
-        <!-- ==================== LEFT: Character Panel ==================== -->
-        <div id="character-panel" class="relative flex items-center justify-center w-1/2 min-w-0 overflow-hidden">
-
-            <!-- Ambient Background Glow -->
-            <div class="absolute inset-0 pointer-events-none">
-                <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-500/20 rounded-full blur-[120px] animate-pulse"></div>
-                <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-glow-cyan/10 rounded-full blur-[100px] animate-pulse" style="animation-delay: 2s;"></div>
-            </div>
-
-            <!-- Character Display (Double Buffered) -->
-            <div id="character-container" class="relative z-10 w-full h-full flex items-end justify-center">
-                <img id="char-frame-a" class="absolute bottom-0 max-h-full w-auto object-contain transition-opacity duration-100" alt="Character" draggable="false">
-                <img id="char-frame-b" class="absolute bottom-0 max-h-full w-auto object-contain transition-opacity duration-100 opacity-0" alt="Character" draggable="false">
-            </div>
-
-            <!-- State Indicator (Debug) -->
-            <div id="state-badge" class="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase
-                bg-dark-700/80 backdrop-blur-sm border border-white/10 text-accent-400 shadow-lg">
-                natural
-            </div>
-
-            <!-- Preload Progress -->
-            <div id="preload-bar-container" class="absolute bottom-4 left-4 right-4 z-20 opacity-0 transition-opacity duration-300">
-                <div class="flex items-center gap-3">
-                    <span class="text-xs text-white/50 font-medium">Loading frames...</span>
-                    <div class="flex-1 h-1.5 bg-dark-700/80 rounded-full overflow-hidden backdrop-blur-sm">
-                        <div id="preload-bar" class="h-full bg-gradient-to-r from-accent-500 to-glow-cyan rounded-full transition-all duration-200" style="width: 0%"></div>
-                    </div>
-                    <span id="preload-percent" class="text-xs text-white/50 font-mono">0%</span>
-                </div>
-            </div>
+      <!-- ==================== LEFT: Character Panel ==================== -->
+      <div id="character-panel" class="relative flex items-center justify-center w-1/2 min-w-0 overflow-hidden">
+        <!-- Ambient Background Glow -->
+        <div class="absolute inset-0 pointer-events-none">
+          <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-500/20 rounded-full blur-[120px] animate-pulse"></div>
+          <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-glow-cyan/10 rounded-full blur-[100px] animate-pulse" style="animation-delay: 2s"></div>
         </div>
 
-        <!-- ==================== RIGHT: Chat Panel ==================== -->
-        <div id="chat-panel" class="relative flex flex-col w-1/2 min-w-0 border-l border-white/5">
-
-            <!-- Glass Background -->
-            <div class="absolute inset-0 bg-dark-800/60 backdrop-blur-xl"></div>
-
-            <!-- Chat Header -->
-            <div class="relative z-10 flex items-center gap-3 px-6 py-4 border-b border-white/5">
-                <div class="relative">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500 to-glow-pink flex items-center justify-center text-sm font-bold shadow-lg shadow-accent-500/30">
-                        AI
-                    </div>
-                    <div id="ai-status-dot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-dark-800 shadow-lg shadow-emerald-400/50"></div>
-                </div>
-                <div>
-                    <h1 class="text-base font-semibold text-white/90">AI Character</h1>
-                    <p id="ai-status-text" class="text-xs text-emerald-400/80 font-medium">Online</p>
-                </div>
-                <div class="ml-auto flex items-center gap-2">
-                    <button id="btn-clear" class="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-all" title="Clear Chat">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Messages Container -->
-            <div id="chat-messages" class="relative z-10 flex-1 overflow-y-auto px-6 py-4 space-y-4 scroll-smooth">
-                <!-- Welcome message -->
-                <div class="flex justify-center">
-                    <div class="px-4 py-2 rounded-full bg-white/5 text-xs text-white/30 font-medium">
-                        Mulai percakapan dengan AI Character ✨
-                    </div>
-                </div>
-            </div>
-
-            <!-- Typing Indicator -->
-            <div id="typing-indicator" class="relative z-10 px-6 py-2 hidden">
-                <div class="flex items-center gap-2 text-white/40 text-sm">
-                    <div class="flex gap-1">
-                        <span class="typing-dot w-2 h-2 rounded-full bg-accent-400/60"></span>
-                        <span class="typing-dot w-2 h-2 rounded-full bg-accent-400/60"></span>
-                        <span class="typing-dot w-2 h-2 rounded-full bg-accent-400/60"></span>
-                    </div>
-                    <span class="text-xs">AI sedang mengetik...</span>
-                </div>
-            </div>
-
-            <!-- Input Area -->
-            <div class="relative z-10 px-4 py-4 border-t border-white/5">
-                <div class="flex items-end gap-3 bg-dark-700/50 rounded-2xl border border-white/5 px-4 py-3 focus-within:border-accent-500/40 transition-colors">
-                    <textarea id="chat-input"
-                        class="flex-1 bg-transparent text-white/90 text-sm placeholder-white/25 resize-none outline-none max-h-28 leading-relaxed"
-                        placeholder="Ketik pesan..."
-                        rows="1"></textarea>
-                    <button id="btn-send"
-                        class="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500 to-accent-600 hover:from-accent-400 hover:to-accent-500
-                        flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg shadow-accent-500/30
-                        disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
-                        disabled>
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 0l-7 7m7-7l7 7"/></svg>
-                    </button>
-                </div>
-                <p class="text-center text-[10px] text-white/15 mt-2">AI Character may produce inaccurate information</p>
-            </div>
+        <!-- Character Display (Double Buffered) -->
+        <div id="character-container" class="relative z-10 w-full h-full flex items-end justify-center">
+          <img id="char-frame-a" class="absolute bottom-0 max-h-full w-auto object-contain transition-opacity duration-100" alt="Character" draggable="false" />
+          <img id="char-frame-b" class="absolute bottom-0 max-h-full w-auto object-contain transition-opacity duration-100 opacity-0" alt="Character" draggable="false" />
         </div>
+
+        <!-- State Indicator (Debug) -->
+        <div id="state-badge" class="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-dark-700/80 backdrop-blur-sm border border-white/10 text-accent-400 shadow-lg">natural</div>
+
+        <!-- Preload Progress -->
+        <div id="preload-bar-container" class="absolute bottom-4 left-4 right-4 z-20 opacity-0 transition-opacity duration-300">
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-white/50 font-medium">Loading frames...</span>
+            <div class="flex-1 h-1.5 bg-dark-700/80 rounded-full overflow-hidden backdrop-blur-sm">
+              <div id="preload-bar" class="h-full bg-gradient-to-r from-accent-500 to-glow-cyan rounded-full transition-all duration-200" style="width: 0%"></div>
+            </div>
+            <span id="preload-percent" class="text-xs text-white/50 font-mono">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== RIGHT: Chat Panel ==================== -->
+      <div id="chat-panel" class="relative flex flex-col w-1/2 min-w-0 border-l border-white/5">
+        <!-- Glass Background -->
+        <div class="absolute inset-0 bg-dark-800/60 backdrop-blur-xl"></div>
+
+        <!-- Chat Header -->
+        <div class="relative z-10 flex items-center gap-3 px-6 py-4 border-b border-white/5">
+          <div class="relative">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500 to-glow-pink flex items-center justify-center text-sm font-bold shadow-lg shadow-accent-500/30">AI</div>
+            <div id="ai-status-dot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-dark-800 shadow-lg shadow-emerald-400/50"></div>
+          </div>
+          <div>
+            <h1 class="text-base font-semibold text-white/90">AI Character</h1>
+            <p id="ai-status-text" class="text-xs text-emerald-400/80 font-medium">Online</p>
+          </div>
+          <div class="ml-auto flex items-center gap-2">
+            <button id="btn-clear" class="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-all" title="Clear Chat">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages Container -->
+        <div id="chat-messages" class="relative z-10 flex-1 overflow-y-auto px-6 py-4 space-y-4 scroll-smooth">
+          <!-- Welcome message -->
+          <div class="flex justify-center">
+            <div class="px-4 py-2 rounded-full bg-white/5 text-xs text-white/30 font-medium">Mulai percakapan dengan AI Character ✨</div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" class="relative z-10 px-6 py-2 hidden">
+          <div class="flex items-center gap-2 text-white/40 text-sm">
+            <div class="flex gap-1">
+              <span class="typing-dot w-2 h-2 rounded-full bg-accent-400/60"></span>
+              <span class="typing-dot w-2 h-2 rounded-full bg-accent-400/60"></span>
+              <span class="typing-dot w-2 h-2 rounded-full bg-accent-400/60"></span>
+            </div>
+            <span class="text-xs">AI sedang mengetik...</span>
+          </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="relative z-10 px-4 py-4 border-t border-white/5">
+          <div class="flex items-end gap-3 bg-dark-700/50 rounded-2xl border border-white/5 px-4 py-3 focus-within:border-accent-500/40 transition-colors">
+            <textarea id="chat-input" class="flex-1 bg-transparent text-white/90 text-sm placeholder-white/25 resize-none outline-none max-h-28 leading-relaxed" placeholder="Ketik pesan..." rows="1"></textarea>
+            <button
+              id="btn-send"
+              class="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500 to-accent-600 hover:from-accent-400 hover:to-accent-500 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg shadow-accent-500/30 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
+              disabled
+            >
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
+            </button>
+          </div>
+          <p class="text-center text-[10px] text-white/15 mt-2">AI Character may produce inaccurate information</p>
+        </div>
+      </div>
     </div>
 
     <!-- Script -->
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
