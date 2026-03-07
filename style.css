@@ -1,0 +1,156 @@
+/* ========================================
+   AI Character Chat — Custom Styles
+   ======================================== */
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+}
+
+/* --- Body & Selection --- */
+body {
+    background: linear-gradient(135deg, #0a0a1a 0%, #111128 40%, #0f0f2a 100%);
+    user-select: none;
+}
+::selection {
+    background: rgba(139, 92, 246, 0.4);
+    color: #fff;
+}
+
+/* --- Typing Dots Animation --- */
+.typing-dot {
+    animation: typingBounce 1.4s infinite ease-in-out;
+}
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* --- Chat Bubbles --- */
+.chat-bubble-user {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    max-width: 80%;
+    word-break: break-word;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+    animation: bubbleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chat-bubble-ai {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.75rem 1rem;
+    max-width: 80%;
+    word-break: break-word;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: bubbleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bubbleIn {
+    0% { transform: scale(0.8) translateY(10px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* --- Chat message text styling --- */
+.chat-bubble-ai p {
+    margin: 0;
+    line-height: 1.6;
+}
+.chat-bubble-user p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- Textarea Auto-Resize --- */
+#chat-input {
+    scrollbar-width: none;
+}
+#chat-input::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- Pulse glow for character --- */
+@keyframes ambientPulse {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 0.25; transform: scale(1.05); }
+}
+
+/* --- Status dot pulse --- */
+#ai-status-dot {
+    animation: statusPulse 2s infinite ease-in-out;
+}
+@keyframes statusPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+}
+
+/* --- Character image anti-flicker --- */
+#char-frame-a,
+#char-frame-b {
+    image-rendering: auto;
+    will-change: opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* --- Button hover glow --- */
+#btn-send:not(:disabled):hover {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.4), 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* --- Responsive: Mobile / Narrow --- */
+@media (max-width: 768px) {
+    #app {
+        flex-direction: column;
+    }
+    #character-panel {
+        width: 100%;
+        height: 40vh;
+        min-height: 250px;
+    }
+    #chat-panel {
+        width: 100%;
+        height: 60vh;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* --- Fade in utility --- */
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Shimmer for loading states --- */
+.shimmer {
+    background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.05) 50%, transparent 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
