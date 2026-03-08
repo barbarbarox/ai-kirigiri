@@ -32,7 +32,7 @@
     {
       "src": "images/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
@@ -85,4 +85,5 @@
   ],
   "prefer_related_applications": false
 }
+
 
