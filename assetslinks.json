@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.ai_kirigiri.twa",
+        "sha256_cert_fingerprints": ["1D:4A:3B:59:80:AD:3B:78:E3:9C:D0:F4:A9:95:05:54:A3:3D:8E:0E:BA:90:6C:DC:55:89:10:F7:D4:BB:C3:E3"]
+      }
+    }]
